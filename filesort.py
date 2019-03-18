@@ -12,7 +12,7 @@ for l in range(10):
     for i in range(10):
         buffer = [int(byte_array[x]) for x in range(file_pointer,(file_pointer + 1000))]  # this buffer consists of integers
         file_pointer = file_pointer + 1000  # move our position(RETAINS ITS VALUE ON THE OUTER LOOP)
-        for index in range(1000):
+        for index in range(1000):  # fill the buffer with the array_to_sort contents
             array_to_sort.append(buffer[index])
 
     array_to_sort.sort()
@@ -21,7 +21,7 @@ for l in range(10):
     filename = "sorted_file" + str(l)  # creates the name of the l-th sorted file(the outer loop!, not htis one)
     if os.path.exists(filename):  # check if there is an old existing file...
         os.remove(filename)  # ...and delete it
-        print("deleted the file " + filename)
+        print("deleted old file " + filename)
     sorted_file = open(filename, 'a+b')  # create i-th sorted file and name it accordingly
     array_pointer = 0  # a pointer that shows position inside 10,000 cell array
 
@@ -29,9 +29,10 @@ for l in range(10):
         buffer = []
         for x in range(array_pointer, (array_pointer + 1000)):  # take the first,second,etc, 1000 elements of sorted_array
             buffer.append(sorted_array[x])
-        array_pointer = array_pointer + 1000
+        array_pointer = array_pointer + 1000  # this array pointer is retained through this loop(k loop)
         byte_buffer = bytearray(buffer)  # convert the buffer to bytearray
         sorted_file.write(byte_buffer)  # writes(appends) the buffer to the i-th sorted file
+    print("created file " + filename + "\n")
 
     sorted_file.close()
 
