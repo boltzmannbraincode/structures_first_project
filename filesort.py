@@ -11,17 +11,19 @@ for l in range(10):
         for index in range(1000):
             array_to_sort.append(buffer[index])
 
-    sorted_array = array_to_sort.sort()
+    array_to_sort.sort()
+    sorted_array = array_to_sort
 
     for k in range(10):
         buffer = []
         array_pointer = 0  # a pointer that shows position inside 10,000 cell array
-        for x in range(array_pointer, (array_pointer + 1000)):
+        for x in range(array_pointer, (array_pointer + 1000)):  # take the first,second,etc, 1000 elements of sorted_array
             buffer.append(sorted_array[x])
             array_pointer = array_pointer + 1000
         filename = "sorted_file" + str(l)  # creates the name of the l-th sorted file(the outer loop!, not htis one)
         sorted_file = open(filename, 'a+b')  # create i-th sorted file and name it accordingly
-        sorted_file.write(buffer)  # writes(appends) the buffer to the i-th sorted file
+        byte_buffer = bytearray(buffer)  # convert the buffer to bytearray
+        sorted_file.write(byte_buffer)  # writes(appends) the buffer to the i-th sorted file
 
 
 
