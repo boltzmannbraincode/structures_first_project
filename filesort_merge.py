@@ -25,11 +25,18 @@ temp_buffer = [0 for c in range(10)]  # a temporary buffer to hold the first val
 for i in range(10):  # initially fill each buffer once
     buffers[i] = read_buffer_from_file(i,0)  # fill the i-th buffer from the beginning of the file(hence the 0)
     file_pointers[i] = file_pointers[i] + buffer_size  # increment the file pointer by buffer_size
-
+min_value = buffers[0][buffer_pointers[0]]
+buffer_of_smaller_value = 0  # variable to keep the origin buffer of the smaller value
 for x in range(10):  # fill the temp_buffer with the first of each sorted_file buffer
-    # temp_buffer[x] = buffer_pointers[x]-th of buffers[x](the x-th buffer)
-    temp_buffer[x] = buffers[x][buffer_pointers[x]]
-    
+    # buffer_pointers[x]-th of buffers[x](the x-th buffer)
+    if (buffers[x][buffer_pointers[x]]<min_value):
+        min_value = buffers[x][buffer_pointers[x]]
+        buffer_of_smallest_value = x  # it keeps the buffer number that the smallest number came from, to increment its buffer_pointer later
+
+
+
+
+
 
 
 
