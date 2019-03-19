@@ -40,7 +40,7 @@ for n in range(100000):
     buffer_of_smallest_value = 0  # variable to keep the origin buffer of the smaller value
     for x in list_of_files:  # fill the temp_buffer with the first of each sorted_file buffer
         # buffer_pointers[x]-th of buffers[x](the x-th buffer), FIND LESSER VALUE
-        if (buffers[x][buffer_pointers[x]] < min_value ):  # if the current value is smaller than the previous, and if it is,it is set as min_value
+        if buffers[x][buffer_pointers[x]] < min_value:  # if the current value is smaller than the previous, and if it is,it is set as min_value
             min_value = buffers[x][buffer_pointers[x]]
             buffer_of_smallest_value = x  # it keeps the buffer number that the smallest number came from, to increment its buffer_pointer later
         buffer_pointers[buffer_of_smallest_value] = buffer_pointers[buffer_of_smallest_value] + 1
@@ -73,7 +73,7 @@ print("Testing " + filename_to_test +"... \n")
 print("Printing first 1000 numbers... ")
 number_file = open(filename_to_test, 'rb')
 byte_array = bytearray(number_file.read())
-for i in range(10000):
+for i in range(1000):
     print(str(int(byte_array[i])) + "," , end = '')
 print("\nIf the numbers seem sorted, chances are that the sorting was successful.")
 
