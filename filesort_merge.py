@@ -4,14 +4,13 @@ N = 100000  # amount of numbers that we work with
 
 def read_buffer_from_file(file_number,file_pointer,buffer_size):  # reads the desired buffer from the file_number-th file
     buffer = []
-    if (file_pointer < 9000):
+    if (file_pointer <= 9000):
         filename = "sorted_file" + str(file_number)
         sorted_file = open(filename, 'rb')
         sorted_file.seek(file_pointer)  # sets the beginning of our reading space on the file at position file_pointer
         byte_array = bytearray(sorted_file.read(buffer_size))  # reads buffer_size amount of bytes from the file
         sorted_file.close()
         for i in range( buffer_size):  # fill the buffer from the file TODO CHECK (-1)
-            print(" i = " + str(i))
             buffer.append(byte_array[i])
         return buffer
     else:
@@ -47,11 +46,12 @@ if os.path.exists("final_file"):  # check if there is an old existing file...
 
 # M A I N   B I G   L O O P
 for main_counter in range(N):
-    print("maincounter=" + str(main_counter))
     for i in list_of_files:
-        temp_list[i] = buffer[i][buffer_pointer[0]]
+        temp_list[i] = buffer[i][buffer_pointer[i]]
+
     # now temp_list holds all the numbers that need to be compared(CONFIRMED!)
     min_val = min(temp_list)
+
     print("MinVal= " + str(min_val))
     position_of_min_val = temp_list.index(min_val)
 
@@ -62,7 +62,7 @@ for main_counter in range(N):
     buffer11.append(min_val)
 
     # check buffer11
-    if len(buffer11) == 1000 :
+    if len(buffer11) == buffer_size :
         write_buffer11_to_file(buffer11)
         disk_access_counter = disk_access_counter + 1
         buffer11.clear()
@@ -76,15 +76,24 @@ for main_counter in range(N):
 
     # check fileX
     if file_pointer[position_of_min_val] >=10000:
-        list_of_files.remove(position_of_min_val)
+        print("position_of_min_val" + str(position_of_min_val))
+        try:
+            list_of_files.remove(position_of_min_val)
+        except:
+            print("Removed a file...")
         filename = "sorted_file" + str(position_of_min_val)
-        os.remove(filename)
+        #os.remove(filename)  # TODO return this comment back to code
+
 
 print("\n\n\nTotal disk_access_counter = " + str(disk_access_counter))
 
 
-
-
-
-
-
+################################################### T E S T ########################################################
+filename_to_test = "final_file"  # change file name to test a different file
+print("\nTesting " + filename_to_test +"... \n")
+print("\nPrinting first 1000 numbers... ")
+number_file = open(filename_to_test, 'rb')
+byte_array = bytearray(number_file.read())
+for i in range(10000):
+    print(str(int(byte_array[i])) + "," , end = '')
+print("\nIf the numbers seem sorted, chances are that the sorting was successful.")
