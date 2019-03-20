@@ -29,7 +29,9 @@ def serial_search_file(number_we_search,):  # used to search the entire file at 
         buffer = read_buffer_from_file()
         if file_pointer > 99000:
             print("The number was not found")
-            found = 1
+            return 1
+    if found == 1 :
+        print("Number found!")
 
 def serial_search_buffer(number_we_search,buffer):
     found = 0
@@ -45,19 +47,19 @@ def binary_search(number_we_search):  # file length in bytes is used to determin
     beginning = 0  # beginning buffer number
     end =  int(100000/buffer_size)  # ending buffer number.100000 is the size of the file in bytes
     found = False
-    while beginning<=(end-5) and not found:
+    while beginning<=(end-3) and not found:
         midpoint = (beginning + end)//2
         file_pointer = midpoint*buffer_size
         midpopint_buffer = read_buffer_from_file()
 
         if serial_search_buffer(number_we_search,midpopint_buffer) == 1:
              found = True
+             print("Number found using binary search!")
         else:
              if number_we_search < min(midpopint_buffer):
                   end = midpoint-1
              else:
                   beginning = midpoint+1
-    print("Number not found using binary search")
     return found
 
 # essential variables initialisation (some are used as global in the functions)
@@ -74,14 +76,16 @@ else:
     print("Python scripts ( filemaker.py, filesort.py and filesort_merge.py).")
     exit()  # terminates the program
 
-
-
-serial_search_file(20)
-print("Disk accesses with serial: " + str(disk_access_counter))
+# test serial search
+print("Attempting serial search...")
+serial_search_file(10)
+print("Disk accesses with serial: " + str(disk_access_counter) + "\n")
 
 disk_access_counter = 0
 
-binary_search(20)
+# test binary search
+print("Attempting binary search..." )
+binary_search(22)
 print("Disk acceses with binary: " + str(disk_access_counter))
 
 
