@@ -31,10 +31,10 @@ def serial_search_file(number_we_search,):  # used to search the entire file at 
                 found = 1
         buffer = read_buffer_from_file()
         if file_pointer > 99000:
-            print("The number was not found")
             return 1
     if found == 1 :
-        print("Number found!")
+        #print("Number found!")
+        return 1  # means that the search was successful
 
 def serial_search_buffer(number_we_search,buffer):
     found = 0
@@ -56,16 +56,17 @@ def binary_search(number_we_search):  # file length in bytes is used to determin
         midpopint_buffer = read_buffer_from_file()
 
         if serial_search_buffer(number_we_search,midpopint_buffer) == 1:
-             found = True
-             print("Number found using binary search!")
+             #print("Number found using binary search!")
+             return 1
         else:
              if number_we_search < min(midpopint_buffer):
                   end = midpoint-1
              else:
                   beginning = midpoint+1
     if found == False :
-        print("Number was NOT found using binary search!")
-    return found
+        #print("Number was NOT found using binary search!")
+        return 0
+
 
 # essential variables initialisation (some are used as global in the functions)
 file_pointer = 0
@@ -82,24 +83,46 @@ else:
     exit()  # terminates the program
 
 # test serial search
-print("Attempting serial search...")
+print("Attempting serial search...")  # with numbers that are in our file
 for a in range(8):
-    random_int = random.randint(1,100)
+    random_int = random.randint(1,18)
     serial_search_file(random_int)
 
-avg_disk_access_counter_serial = disk_access_counter/40
+avg_disk_access_counter_serial_success = disk_access_counter/40
+
+disk_access_counter = 0
+
+print("Attempting serial search...")  # with numbers that are not in our file
+for a in range(8):
+    random_int = random.randint(25,100)
+    serial_search_file(random_int)
+
+avg_disk_access_counter_serial_fail= disk_access_counter/40
 
 disk_access_counter = 0
 
 # test binary search
-print("Attempting binary search..." )
+print("Attempting binary search..." )  # with numbers that are in our file
 for i in range(40):
-    random_integer = random.randint(1,100)
+    random_integer = random.randint(1,18)
     binary_search(random_integer)
 
-avg_disk_access_counter_binary = disk_access_counter/40
-print("Average disk access count with binary search: " + str(avg_disk_access_counter_binary))
-print("Average disk access count with serial search: " + str(avg_disk_access_counter_serial) + "\n")
+avg_disk_access_counter_binary_success = disk_access_counter/40
+
+disk_access_counter = 0
+
+print("Attempting binary search..." )  # with numbers that are not in our file
+for i in range(40):
+    random_integer = random.randint(25,100)
+    binary_search(random_integer)
+avg_disk_access_counter_binary_fail = disk_access_counter/40
+
+
+print("Average disk access count with succeeded binary search: " + str(avg_disk_access_counter_binary_success))
+print("Average disk access count with failed binary search: " + str(avg_disk_access_counter_binary_fail) + "\n")
+
+print("Average disk access count with succeeded serial search: " + str(avg_disk_access_counter_serial_success))
+print("Average disk access count with failed serial search: " + str(avg_disk_access_counter_serial_fail))
 
 
 
