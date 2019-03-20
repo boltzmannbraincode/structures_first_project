@@ -5,11 +5,13 @@ N = 100000  # amount of numbers that we work with
 def read_buffer_from_file(file_number,file_pointer,buffer_size):  # reads the desired buffer from the file_number-th file
     buffer = []
     if (file_pointer <= 9000):
+        global disk_access_counter
         filename = "sorted_file" + str(file_number)
         sorted_file = open(filename, 'rb')
         sorted_file.seek(file_pointer)  # sets the beginning of our reading space on the file at position file_pointer
         byte_array = bytearray(sorted_file.read(buffer_size))  # reads buffer_size amount of bytes from the file
         sorted_file.close()
+        disk_access_counter = disk_access_counter + 1
         for i in range( buffer_size):  # fill the buffer from the file TODO CHECK (-1)
             buffer.append(byte_array[i])
         return buffer
@@ -18,9 +20,11 @@ def read_buffer_from_file(file_number,file_pointer,buffer_size):  # reads the de
 
 
 def write_buffer11_to_file(buffer11):
+    global disk_access_counter
     final_file = open("final_file", "ab")
     byte_buffer11 = bytearray(buffer11)
     final_file.write(byte_buffer11)
+    disk_access_counter = disk_access_counter + 1
     final_file.close()
 
 #############################################################################################################
@@ -32,12 +36,11 @@ list_of_files = [0,1,2,3,4,5,6,7,8,9]                                           
 position_of_min_val = 0                                                                                     #
 buffer11 = []                                                                                               #
 disk_access_counter = 0                                                                                     #
-temp_list = [0 for d in range(10)]                                                                                              #
+temp_list = [0 for d in range(10)]                                                                          #
 #############################################################################################################
 
 for initial_fill_counter in range(10):  # initialise all the buffers once
     buffer[initial_fill_counter] = read_buffer_from_file(initial_fill_counter,file_pointer[initial_fill_counter],buffer_size)
-    disk_access_counter = disk_access_counter + 1
     file_pointer[initial_fill_counter] = file_pointer[initial_fill_counter] + buffer_size
 
 if os.path.exists("final_file"):  # check if there is an old existing file...
@@ -64,13 +67,11 @@ for main_counter in range(N):
     # check buffer11
     if len(buffer11) == buffer_size :
         write_buffer11_to_file(buffer11)
-        disk_access_counter = disk_access_counter + 1
         buffer11.clear()
 
     # check bufferX
     if buffer_pointer[position_of_min_val] == (buffer_size - 1):
         buffer[position_of_min_val] = read_buffer_from_file(position_of_min_val,file_pointer[position_of_min_val],buffer_size)
-        disk_access_counter = disk_access_counter + 1
         file_pointer[position_of_min_val] = file_pointer[position_of_min_val] + buffer_size
         buffer_pointer[position_of_min_val] = 0
 
@@ -82,7 +83,7 @@ for main_counter in range(N):
         except:
             print("Removed a file...")
         filename = "sorted_file" + str(position_of_min_val)
-        #os.remove(filename)  # TODO return this comment back to code
+
 
 
 print("\n\n\nTotal disk_access_counter = " + str(disk_access_counter))
