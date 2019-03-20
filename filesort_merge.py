@@ -1,4 +1,5 @@
 #second half of second part of the project
+import os
 N = 100000  # amount of numbers that we work with
 
 def read_buffer_from_file(file_number,file_pointer,buffer_size):  # reads the desired buffer from the file_number-th file
@@ -38,11 +39,14 @@ for initial_fill_counter in range(10):  # initialise all the buffers once
     disk_access_counter = disk_access_counter + 1
     file_pointer[initial_fill_counter] = file_pointer[initial_fill_counter] + buffer_size
 
-
+if os.path.exists("final_file"):  # check if there is an old existing file...
+    os.remove("final_file")  # ...and delete it
+    print("deleted old final_file.")
 
 # M A I N   B I G   L O O P
 for main_counter in range(N):
-    min_val = buffer[list_of_files[0]][0]  # initialise with the first element of the first buffer that exists in the available files
+    min_val = buffer[list_of_files[list_of_files[0]]][buffer_pointer[list_of_files[0]]]  # initialise with the first element of the first buffer that exists in the available files
+    print("MinVal = " + str(min_val))
     #finds the lesser value from the buffers
     for min_val_counter in list_of_files:
         if buffer[min_val_counter][buffer_pointer[min_val_counter]] < min_val:
@@ -52,13 +56,15 @@ for main_counter in range(N):
 
     # IMPORTAND: the only change is hapening to buffer No. position_of_min_val, so from now on we only use that variable on our checks.
     # CHECKS if the current file/buffer is emptied
-    if buffer_pointer[position_of_min_val] == 1000:  # if the buffer is "empty"
+    if buffer_pointer[position_of_min_val] == buffer_size:  # if the buffer is "empty"(pointer had reached the end)
         if file_pointer[position_of_min_val] < 10000:
             buffer[position_of_min_val] = read_buffer_from_file(position_of_min_val,file_pointer[position_of_min_val],buffer_size)
             buffer_pointer[position_of_min_val] = 0
             file_pointer[position_of_min_val] = file_pointer[position_of_min_val] + buffer_size
         else:
             list_of_files.remove(position_of_min_val)
+            filename = "sorted_file" + str(position_of_min_val)
+            os.remove(filename)
             print("Removed sorted_file" + str(position_of_min_val) + " from file list.")
 
     buffer11.append(buffer[position_of_min_val][buffer_pointer[position_of_min_val]])  # adds the minimum value to the buffer11
@@ -68,11 +74,11 @@ for main_counter in range(N):
         disk_access_counter = disk_access_counter + 1
         buffer11.clear()
 
-print("Total disk_acces_counter=" + str(disk_access_counter))
+print("\n\n\nTotal disk_acces_counter=" + str(disk_access_counter))
 
 filename_to_test = "final_file"  # change file name to test a different file
-print("Testing " + filename_to_test +"... \n")
-print("Printing first 1000 numbers... ")
+print("\nTesting " + filename_to_test +"... \n")
+print("\nPrinting first 1000 numbers... ")
 number_file = open(filename_to_test, 'rb')
 byte_array = bytearray(number_file.read())
 for i in range(10000):
