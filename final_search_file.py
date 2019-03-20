@@ -1,5 +1,6 @@
 # the third and final part of the lab, which involves searching in the file for some numbers
 import os
+import random
 
 def read_buffer_from_file():  # reads the desired buffer from the file_number-th file
     buffer = []
@@ -21,6 +22,8 @@ def read_buffer_from_file():  # reads the desired buffer from the file_number-th
 
 def serial_search_file(number_we_search,):  # used to search the entire file at once using serial(sequential) search
     found = 0
+    global file_pointer
+    file_pointer = 0  # it is returned to zero to avoid exceeding the limits of the file
     buffer = read_buffer_from_file()
     while (found == 0):
         for i in range(1000):
@@ -60,6 +63,8 @@ def binary_search(number_we_search):  # file length in bytes is used to determin
                   end = midpoint-1
              else:
                   beginning = midpoint+1
+    if found == False :
+        print("Number was NOT found using binary search!")
     return found
 
 # essential variables initialisation (some are used as global in the functions)
@@ -78,15 +83,23 @@ else:
 
 # test serial search
 print("Attempting serial search...")
-serial_search_file(10)
-print("Disk accesses with serial: " + str(disk_access_counter) + "\n")
+for a in range(8):
+    random_int = random.randint(1,100)
+    serial_search_file(random_int)
+
+avg_disk_access_counter_serial = disk_access_counter/40
 
 disk_access_counter = 0
 
 # test binary search
 print("Attempting binary search..." )
-binary_search(22)
-print("Disk acceses with binary: " + str(disk_access_counter))
+for i in range(40):
+    random_integer = random.randint(1,100)
+    binary_search(random_integer)
+
+avg_disk_access_counter_binary = disk_access_counter/40
+print("Average disk access count with binary search: " + str(avg_disk_access_counter_binary))
+print("Average disk access count with serial search: " + str(avg_disk_access_counter_serial) + "\n")
 
 
 
