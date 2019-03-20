@@ -19,63 +19,71 @@ def read_buffer_from_file():  # reads the desired buffer from the file_number-th
     else:
         print("error while reading from file: file_pointer>99000")
 
-def serial_search(number_we_search, buffer):
+def serial_search_file(number_we_search,):  # used to search the entire file at once using serial(sequential) search
     found = 0
-    end_loop = 0
-    #buffer = read_buffer_from_file()
-    while (end_loop == 1):
+    buffer = read_buffer_from_file()
+    while (found == 0):
         for i in range(1000):
             if buffer[i] == number_we_search:
                 found = 1
-                end_loop = 1
         buffer = read_buffer_from_file()
         if file_pointer > 99000:
             print("The number was not found")
-            end_loop = 1
+            found = 1
+
+def serial_search_buffer(number_we_search,buffer):
+    found = 0
+    global buffer_size
+    for i in range(buffer_size):
+        if buffer[i] == number_we_search:
+            found = 1
     return found  # if search was successful, it returns 1
 
-def binary_search(number_we_search,file_length):  # file length in bytes is used to determine how many buffers there are to examine
+def binary_search(number_we_search):  # file length in bytes is used to determine how many buffers there are to examine
     global file_pointer
     global buffer_size
     beginning = 0  # beginning buffer number
-    end =  int(file_length/buffer_size)  # ending buffer number
+    end =  int(100000/buffer_size)  # ending buffer number.100000 is the size of the file in bytes
     found = False
-    while beginning<=end and not found:
-        midpoint = int((beginning + end)//2)
+    while beginning<=(end-5) and not found:
+        midpoint = (beginning + end)//2
         file_pointer = midpoint*buffer_size
         midpopint_buffer = read_buffer_from_file()
-        if serial_search(number_we_search,midpopint_buffer) == 1:
+
+        if serial_search_buffer(number_we_search,midpopint_buffer) == 1:
              found = True
         else:
              if number_we_search < min(midpopint_buffer):
-                  last = midpoint-1
+                  end = midpoint-1
              else:
-                  first = midpoint+1
+                  beginning = midpoint+1
+    print("Number not found using binary search")
     return found
 
-
+# essential variables initialisation (some are used as global in the functions)
 file_pointer = 0
 buffer_pointer = 0
 buffer = []
-buffer_size = 1000  #
+buffer_size = 1000
 disk_access_counter = 0
 
 if os.path.exists("final_file"):  # check if there is an old existing file
     print("File found.Proceeding.")
 else:
-    print("There was no existing file, the program will be terminated.")
-    found = 1
+    print("There was no existing file, the program will be terminated.Run again the previous ")
+    print("Python scripts ( filemaker.py, filesort.py and filesort_merge.py).")
+    exit()  # terminates the program
 
 
 
-serial_search(9)
-print("Disk acceses with serial: " + str(disk_access_counter))
+serial_search_file(20)
+print("Disk accesses with serial: " + str(disk_access_counter))
 
 disk_access_counter = 0
 
-binary_search(9,100000)
+binary_search(20)
 print("Disk acceses with binary: " + str(disk_access_counter))
-print("Disk acceses: " + str(disk_access_counter))
+
 
 
 
