@@ -40,14 +40,12 @@ while(found == 0):
     for i in range(1000):
         if buffer[i] == number_we_search :
             found = 1
-            print("Number was found.Total disk_acess_times=" + str(disk_access_counter))
+            
     buffer = read_buffer_from_file()
     if file_pointer > 99000:
         print("The number was not found")
         found = 1
-
-
-
+print("Disk acceses: " + str(disk_access_counter))
 
 
 
