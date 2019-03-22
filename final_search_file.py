@@ -50,7 +50,7 @@ def binary_search(number_we_search):  # file length in bytes is used to determin
     beginning = 0  # beginning buffer number
     end =  int(100000/buffer_size)  # ending buffer number.100000 is the size of the file in bytes
     found = False
-    while beginning<=(end-3) and not found:
+    while beginning<=(end-1) and not found:
         midpoint = (beginning + end)//2
         file_pointer = midpoint*buffer_size
         midpopint_buffer = read_buffer_from_file()
@@ -84,7 +84,7 @@ else:
 
 # test serial search
 print("Attempting serial search...")  # with numbers that are in our file
-for a in range(8):
+for a in range(40):
     random_int = random.randint(1,18)
     serial_search_file(random_int)
 
@@ -93,7 +93,7 @@ avg_disk_access_counter_serial_success = disk_access_counter/40
 disk_access_counter = 0
 
 print("Attempting serial search...")  # with numbers that are not in our file
-for a in range(8):
+for a in range(40):
     random_int = random.randint(25,100)
     serial_search_file(random_int)
 
